@@ -14,6 +14,7 @@ import {
 // core components
 import UserHeader from "components/Headers/UserHeader.js";
 import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const Profile = () => {
   const [isEditing, setIsEditing] = useState(false)
@@ -24,6 +25,8 @@ const Profile = () => {
   useEffect(() => {
     handleGetUser()
   }, [])
+
+  const navigate = useNavigate();
 
   const handleGetUser = async () => {
     const response = await fetch(`http://localhost:8000/users/${id}/`)
@@ -62,20 +65,18 @@ const Profile = () => {
               </Row>
               <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                 <div className="d-flex justify-content-between">
+                  <Link to={`../group/${user?.id_grupo}`}>
                   <Button
                     className="mr-4"
                     color="info"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
                     size="sm"
                   >
                     Grupo
                   </Button>
+                  </Link>
                   <Button
                     className="float-right"
                     color="default"
-                    href="#pablo"
-                    onClick={(e) => e.preventDefault()}
                     size="sm"
                   >
                     Chat

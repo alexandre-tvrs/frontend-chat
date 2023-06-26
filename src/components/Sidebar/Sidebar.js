@@ -50,27 +50,6 @@ const Sidebar = (props) => {
   const closeCollapse = () => {
     setCollapseOpen(false);
   };
-  // creates the links that appear in the left menu / Sidebar
-  const createLinks = (routes) => {
-      return routes.map((prop, key) => {
-        if (prop.name != "Login" && prop.name != "Registro"){
-        return (
-          <NavItem key={key}>
-            <NavLink
-              to={prop.layout + prop.path}
-              tag={NavLinkRRD}
-              onClick={closeCollapse}
-            >
-              <i className={prop.icon} />
-              {prop.name}
-            </NavLink>
-          </NavItem>
-        );
-        }
-      });
-  };
-
-  const navigate = useNavigate();
 
   const [user, setUser] = useState(null)
 
@@ -86,6 +65,104 @@ const Sidebar = (props) => {
     setUser(user)
   }
 
+  // creates the links that appear in the left menu / Sidebar
+  const createLinks = (routes) => {
+      return routes.map((prop, key) => {
+        if (prop.name != "Login" && prop.name != "Registro"){
+          if (user?.tipo_usuario == 2){
+            if (prop.name == "Solicitações" || prop.name == "User Profile"){
+              return (
+                <NavItem key={key}>
+                  <NavLink
+                    to={prop.layout + prop.path}
+                    tag={NavLinkRRD}
+                    onClick={closeCollapse}
+                  >
+                    <i className={prop.icon} />
+                    {prop.name}
+                  </NavLink>
+                </NavItem>
+              );
+            }
+          } 
+          else if (user?.id_grupo == null) {
+            if (prop.name == "Solicitações" || prop.name == "Grupos" || prop.name == "User Profile"){
+              return (
+                <NavItem key={key}>
+                  <NavLink
+                    to={prop.layout + prop.path}
+                    tag={NavLinkRRD}
+                    onClick={closeCollapse}
+                  >
+                    <i className={prop.icon} />
+                    {prop.name}
+                  </NavLink>
+                </NavItem>
+              );
+            }
+          }
+          else {
+            if (prop.name == "Timeline" || prop.name == "Grupo" || prop.name == "User Profile" || prop.name == "Chat"){
+              if (prop.name == "Grupo"){
+                  return (
+                    <NavItem key={key}>
+                      <NavLink
+                        to={prop.layout + `/group/${user?.id_grupo}/`}
+                        tag={NavLinkRRD}
+                        onClick={closeCollapse}
+                      >
+                        <i className={prop.icon} />
+                        {prop.name}
+                      </NavLink>
+                    </NavItem>
+                  );
+              } else if (prop.name == "Timeline") {
+                return (
+                  <NavItem key={key}>
+                    <NavLink
+                      to={prop.layout + `/group/${user?.id_grupo}/timeline`}
+                      tag={NavLinkRRD}
+                      onClick={closeCollapse}
+                    >
+                      <i className={prop.icon} />
+                      {prop.name}
+                    </NavLink>
+                  </NavItem>
+                );
+               } else if (prop.name == "Chat") {
+                return (
+                  <NavItem key={key}>
+                    <NavLink
+                      to={prop.layout + `/group/${user?.id_grupo}/chat`}
+                      tag={NavLinkRRD}
+                      onClick={closeCollapse}
+                    >
+                      <i className={prop.icon} />
+                      {prop.name}
+                    </NavLink>
+                  </NavItem>
+                );
+               } else {
+                return (
+                  <NavItem key={key}>
+                    <NavLink
+                      to={prop.layout + prop.path}
+                      tag={NavLinkRRD}
+                      onClick={closeCollapse}
+                    >
+                      <i className={prop.icon} />
+                      {prop.name}
+                    </NavLink>
+                  </NavItem>
+                );
+               }
+            }
+          }
+        }
+      });
+  };
+
+  const navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("token");
