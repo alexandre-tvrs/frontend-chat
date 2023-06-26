@@ -1,17 +1,17 @@
 import React from "react";
-import { useLocation, Route, Routes, Navigate } from "react-router-dom";
+import { useLocation, Route, Routes, Navigate, useNavigate } from "react-router-dom";
 // reactstrap components
 import { Container, Row, Col } from "reactstrap";
 
 // core components
 import AuthNavbar from "components/Navbars/AuthNavbar.js";
-import AuthFooter from "components/Footers/AuthFooter.js";
 
 import routes from "routes.js";
 
 const Auth = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     document.body.classList.add("bg-default");
@@ -23,6 +23,10 @@ const Auth = (props) => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
+    const token = localStorage.getItem("token");
+    if (token != "" && token != null && token != undefined) {
+      navigate("/admin/index");
+    }
   }, [location]);
 
   const getRoutes = (routes) => {
@@ -66,7 +70,6 @@ const Auth = (props) => {
           </Row>
         </Container>
       </div>
-      <AuthFooter />
     </>
   );
 };

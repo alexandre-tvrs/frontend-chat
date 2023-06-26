@@ -1,10 +1,9 @@
 import React from "react";
-import { useLocation, Route, Routes, Navigate } from "react-router-dom";
+import { useLocation, Route, Routes, Navigate, useNavigate } from "react-router-dom";
 // reactstrap components
 import { Container } from "reactstrap";
 // core components
 import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import AdminFooter from "components/Footers/AdminFooter.js";
 import Sidebar from "components/Sidebar/Sidebar.js";
 
 import routes from "routes.js";
@@ -12,11 +11,17 @@ import routes from "routes.js";
 const Admin = (props) => {
   const mainContent = React.useRef(null);
   const location = useLocation();
+  const navigate = useNavigate();
+  
 
   React.useEffect(() => {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
     mainContent.current.scrollTop = 0;
+    const token = localStorage.getItem("token");
+    if (token == "" || token == null || token == undefined) {
+      navigate("/auth/login");
+    }
   }, [location]);
 
   const getRoutes = (routes) => {
@@ -63,9 +68,6 @@ const Admin = (props) => {
           {getRoutes(routes)}
           <Route path="*" element={<Navigate to="/admin/index" replace />} />
         </Routes>
-        <Container fluid>
-          <AdminFooter />
-        </Container>
       </div>
     </>
   );
