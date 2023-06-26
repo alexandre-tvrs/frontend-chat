@@ -1,5 +1,6 @@
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 // reactstrap components
 import {
   DropdownMenu,
@@ -13,6 +14,27 @@ import {
 } from "reactstrap";
 
 const AdminNavbar = (props) => {
+  const [user, setUser] = useState(null)
+
+  const id = localStorage.getItem("id");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    handleGetUser()
+  }, [])
+
+  const handleGetUser = async () => {
+    const response = await fetch(`http://localhost:8000/users/${id}/`)
+    const user = await response.json()
+    setUser(user)
+  }
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/auth/login");
+  };
+
   return (
     <>
       <Navbar className="navbar-top navbar-dark" expand="md" id="navbar-main">
@@ -27,15 +49,11 @@ const AdminNavbar = (props) => {
             <UncontrolledDropdown nav>
               <DropdownToggle className="pr-0" nav>
                 <Media className="align-items-center">
-                  <span className="avatar avatar-sm rounded-circle">
-                    <img
-                      alt="..."
-                      src={require("../../assets/img/theme/icon.png")}
-                    />
+                  <span className="avatar avatar-sm rounded-circle" style={{backgroundImage: `url(${user?.img_usuario})`, width:"36px", height:"36px", backgroundSize:"cover", backgroundPosition:"center", borderRadius:"50%"}}>
                   </span>
                   <Media className="ml-2 d-none d-lg-block">
                     <span className="mb-0 text-sm font-weight-bold">
-                      Alexandre Tavares
+                      {user?.nome}
                     </span>
                   </Media>
                 </Media>
@@ -49,7 +67,7 @@ const AdminNavbar = (props) => {
                   <span>Meu perfil</span>
                 </DropdownItem>
                 <DropdownItem divider />
-                <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+                <DropdownItem href="" onClick={logout}>
                   <i className="ni ni-user-run" />
                   <span>Logout</span>
                 </DropdownItem>

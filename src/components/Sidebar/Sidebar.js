@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { NavLink as NavLinkRRD, Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { NavLink as NavLinkRRD, Link, useNavigate } from "react-router-dom";
 // nodejs library to set properties for components
 import { PropTypes } from "prop-types";
 
@@ -70,6 +70,28 @@ const Sidebar = (props) => {
       });
   };
 
+  const navigate = useNavigate();
+
+  const [user, setUser] = useState(null)
+
+  const id = localStorage.getItem("id");
+
+  useEffect(() => {
+    handleGetUser()
+  }, [])
+
+  const handleGetUser = async () => {
+    const response = await fetch(`http://localhost:8000/users/${id}/`)
+    const user = await response.json()
+    setUser(user)
+  }
+
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/auth/login");
+  };
+
   const { bgColor, routes, logo } = props;
   let navbarBrandProps;
   if (logo && logo.innerLink) {
@@ -130,10 +152,7 @@ const Sidebar = (props) => {
             <DropdownToggle nav>
               <Media className="align-items-center">
                 <span className="avatar avatar-sm rounded-circle">
-                  <img
-                    alt="..."
-                    src={require("../../assets/img/theme/team-1-800x800.jpg")}
-                  />
+                <img style={{backgroundImage: `url(${user?.img_usuario})`, width:"120px", height:"120px", backgroundSize:"cover", backgroundPosition:"center", borderRadius:"50%"}} />
                 </span>
               </Media>
             </DropdownToggle>
@@ -146,7 +165,7 @@ const Sidebar = (props) => {
                 <span>Meu perfil</span>
               </DropdownItem>
               <DropdownItem divider />
-              <DropdownItem href="#pablo" onClick={(e) => e.preventDefault()}>
+              <DropdownItem onClick={ logout }>
                 <i className="ni ni-user-run" />
                 <span>Logout</span>
               </DropdownItem>
