@@ -6,13 +6,22 @@ import Solicitations from "views/examples/Solicitations.js";
 import Groups from "views/examples/Groups.js";
 import Group from "views/examples/Group.js";
 import Chat from "views/examples/Chat.js";
+import Timeline from "views/examples/Timeline.js"
+import Task from "views/examples/Task.js"
 
 var routes = [
+  {
+    path: "/group/:id/task",
+    name: "Task",
+    icon: "ni ni-laptop text-orange",
+    component: <Task />,
+    layout: "/admin",
+  },
   {
     path: "/group/:id/timeline",
     name: "Timeline",
     icon: "ni ni-tv-2 text-primary",
-    component: <Index />,
+    component: <Timeline />,
     layout: "/admin",
   },
   {
