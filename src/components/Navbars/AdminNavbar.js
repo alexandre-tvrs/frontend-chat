@@ -31,7 +31,7 @@ const AdminNavbar = (props) => {
   }
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
     navigate("/auth/login");
   };
 

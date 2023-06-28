@@ -54,7 +54,7 @@ const Admin = (props) => {
         {...props}
         routes={routes}
         logo={{
-          innerLink: "/admin/index",
+          innerLink: "#",
           imgSrc: require("../assets/img/brand/logo_ifsp.png"),
           imgAlt: "...",
         }}
@@ -66,7 +66,7 @@ const Admin = (props) => {
         />
         <Routes>
           {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/admin/index" replace />} />
+          <Route path="*" element={<Navigate to="#" replace />} />
         </Routes>
       </div>
     </>

@@ -4,8 +4,12 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Solicitations from "views/examples/Solicitations.js";
 import Groups from "views/examples/Groups.js";
+import NewGroup from "views/examples/novoGrupo.js";
 import Group from "views/examples/Group.js";
+import JoinGroup from "views/examples/JoinGroup.js";
 import Chat from "views/examples/Chat.js";
+import AprovedGroups from "views/examples/AprovedGroups.js";
+import JudgeSolicitations from "views/examples/JudgeSolicitations.js";
 
 var routes = [
   {
@@ -23,6 +27,13 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/groups/aproved",
+    name: "Grupos em orientação",
+    icon: "ni ni-books text-green",
+    component: <AprovedGroups />,
+    layout: "/admin",
+  },
+  {
     path: "/solicitations",
     name: "Solicitações",
     icon: "ni ni-books text-green",
@@ -30,10 +41,17 @@ var routes = [
     layout: "/admin",
   },
   {
+    path: "/solicitation/:id",
+    name: "Julgar Solicitação",
+    icon: "ni ni-books text-green",
+    component: <JudgeSolicitations />,
+    layout: "/admin",
+  },
+  {
     path: "/group/new",
     name: "Novo Grupo",
     icon: "ni ni-books text-green",
-    component: <Group />,
+    component: <NewGroup />,
     layout: "/admin",
   },
   {
@@ -41,6 +59,13 @@ var routes = [
     name: "Grupo",
     icon: "ni ni-books text-green",
     component: <Group />,
+    layout: "/admin",
+  },
+  {
+    path: "/group/:id/join",
+    name: "JoinGroup",
+    icon: "ni ni-laptop text-orange",
+    component: <JoinGroup />,
     layout: "/admin",
   },
   {
