@@ -27,7 +27,7 @@ const Solicitations = () => {
   }
 
   const handleGetSolicitations = async () => {
-    const response = await fetch(`http://localhost:8000/groups/?aprovado=False&professor=${id}`)
+    const response = await fetch(`http://localhost:8000/groups/?aprovado=True&professor=${id}`)
     const solicitations = await response.json()
 
     setSolicitations(solicitations)
@@ -36,7 +36,7 @@ const Solicitations = () => {
   const createSolicitationCard = (groups) => {
     return !groups ? null : groups.map((prop) => {
       return (
-        <Link to={`/admin/solicitation/${prop.id}`}>
+        <Link to={`/admin/group/${prop.id}`}>
             <Card sx={{ maxWidth: 290, minWidth: 290, minHeight: 255}}>
               <CardActionArea>
                 <CardMedia
@@ -64,7 +64,7 @@ const Solicitations = () => {
     const teste = solicitations.length == 0
     if (teste) {
       return (
-          <Card sx={{ maxWidth: 290, minWidth: 290, minHeight: 255, mt: 4 }}>
+          <Card sx={{ maxWidth: 290, minWidth: 290, minHeight: 255}}>
             <CardActionArea>
               <CardMedia
                 component="img"
@@ -74,7 +74,7 @@ const Solicitations = () => {
               />
               <CardContent>
                 <Typography gutterBottom variant="h5" component="div">
-                  Não existem solicitações abertas
+                  Não existem grupos em orientação
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                 Não existem solicitações abertas!

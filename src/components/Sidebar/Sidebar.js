@@ -70,7 +70,7 @@ const Sidebar = (props) => {
       return routes.map((prop, key) => {
         if (prop.name != "Login" && prop.name != "Registro"){
           if (user?.tipo_usuario == 2){
-            if (prop.name == "Solicitações" || prop.name == "User Profile"){
+            if (prop.name == "Solicitações" || prop.name == "Grupos em orientação" || prop.name == "User Profile"){
               return (
                 <NavItem key={key}>
                   <NavLink
@@ -86,7 +86,7 @@ const Sidebar = (props) => {
             }
           } 
           else if (user?.id_grupo == null) {
-            if (prop.name == "Solicitações" || prop.name == "Grupos" || prop.name == "User Profile"){
+            if (prop.name == "Grupos" || prop.name == "User Profile"){
               return (
                 <NavItem key={key}>
                   <NavLink
@@ -228,9 +228,8 @@ const Sidebar = (props) => {
           <UncontrolledDropdown nav>
             <DropdownToggle nav>
               <Media className="align-items-center">
-                <span className="avatar avatar-sm rounded-circle">
-                <img style={{backgroundImage: `url(${user?.img_usuario})`, width:"120px", height:"120px", backgroundSize:"cover", backgroundPosition:"center", borderRadius:"50%"}} />
-                </span>
+              <span className="avatar avatar-sm rounded-circle" style={{backgroundImage: `url(${user?.img_usuario})`, width:"36px", height:"36px", backgroundSize:"cover", backgroundPosition:"center", borderRadius:"50%"}}>
+              </span>
               </Media>
             </DropdownToggle>
             <DropdownMenu className="dropdown-menu-arrow" right>

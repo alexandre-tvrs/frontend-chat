@@ -27,7 +27,7 @@ const Groups = () => {
   }
 
   const handleGetAvaibleGroups = async () => {
-    const response = await fetch(`http://localhost:8000/available_groups/`)
+    const response = await fetch(`http://localhost:8000/groups/?aprovado=False`)
     const groups = await response.json()
     setGroups(groups)
   }
@@ -35,7 +35,7 @@ const Groups = () => {
   const createGroupCard = (groups) => {
     return !groups ? null : groups.map((prop) => {
       return (
-        <Link to={`/admin/group/${prop.id}`}>
+        <Link to={user?.id_grupo != null && user?.tipo_usuario == 1 ? `/admin/group/${prop.id}` : `/admin/group/${prop.id}/join`}>
             <Card sx={{ maxWidth: 290, minWidth: 290, minHeight: 255}}>
               <CardActionArea>
                 <CardMedia
@@ -63,7 +63,7 @@ const Groups = () => {
     const teste = groups.length == 0
     if (teste) {
       return (
-        <Link redirect={ `new` }>
+        <Link to={ `../group/new` }>
           <Card sx={{ maxWidth: 290, minWidth: 290, minHeight: 255, mt: 4 }}>
             <CardActionArea>
               <CardMedia

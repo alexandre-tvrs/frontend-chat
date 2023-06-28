@@ -26,8 +26,6 @@ const Profile = () => {
     handleGetUser()
   }, [])
 
-  const navigate = useNavigate();
-
   const handleGetUser = async () => {
     const response = await fetch(`http://localhost:8000/users/${id}/`)
     const user = await response.json()
@@ -41,10 +39,11 @@ const Profile = () => {
     form.append("nome", e.target.nome.value);
     form.append("img_usuario", e.target.img.files[0]);
     form.append("registro", user.registro);
-    const response = await fetch(`http://localhost:8000/users/${id}/`, {
+    await fetch(`http://localhost:8000/users/${id}/`, {
       method: "PUT",
       body: form
     })
+    window.location.reload()
   }
 
   return (
@@ -65,15 +64,17 @@ const Profile = () => {
               </Row>
               <CardHeader className="text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
                 <div className="d-flex justify-content-between">
-                  <Link to={`../group/${user?.id_grupo}`}>
-                  <Button
-                    className="mr-4"
-                    color="info"
-                    size="sm"
-                  >
-                    Grupo
-                  </Button>
-                  </Link>
+                  {user?.id_grupo == null ? null : (
+                    <Link to={`../group/${user?.id_grupo}`}>
+                    <Button
+                      className="mr-4"
+                      color="info"
+                      size="sm"
+                    >
+                      Grupo
+                    </Button>
+                    </Link>
+                  )}
                   <Button
                     className="float-right"
                     color="default"
