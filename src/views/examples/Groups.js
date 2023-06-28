@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import {Container, Col, Row} from "reactstrap";
+import {Container, Button, Row, Form} from "reactstrap";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import Header from "components/Headers/Header";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Groups = () => {
 
@@ -19,6 +19,8 @@ const Groups = () => {
     handleGetUser()
     handleGetAvaibleGroups()
   }, [])
+
+  const navegate = useNavigate()
 
   const handleGetUser = async () => {
     const response = await fetch(`http://localhost:8000/users/${id}/`)
@@ -93,6 +95,17 @@ const Groups = () => {
     <>
     <Header />
     <Container fluid style={{paddingTop: 25}}>
+      {user?.tipo_usuario != 1 ? null : (
+      <Link to={ `../group/new` }>
+      <Button
+      color="success"
+      style={{marginBottom: 25}}
+      >
+      Criar novo grupo
+      </Button>
+      </Link>
+      )}
+    
         <Row style={{gap: 25}}>
         { groups != null && createCards(groups)}
         </Row>
