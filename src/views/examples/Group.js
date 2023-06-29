@@ -135,6 +135,14 @@ const Group = () => {
                     >
                       {isEditing ? "Cancelar" : "Editar"}
                     </Button>
+                    {user?.tipo_usuario == 2 ? (
+                      <Button
+                        color="success"
+                        href={`/admin/group/${group?.id}/task`}
+                      >
+                        Adicionar Task
+                      </Button>
+                    ):null}
                     {isEditing ? (
                       <Button
                         color="success"

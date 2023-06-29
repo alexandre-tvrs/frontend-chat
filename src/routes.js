@@ -10,13 +10,22 @@ import JoinGroup from "views/examples/JoinGroup.js";
 import Chat from "views/examples/Chat.js";
 import AprovedGroups from "views/examples/AprovedGroups.js";
 import JudgeSolicitations from "views/examples/JudgeSolicitations.js";
+import Timeline from "views/examples/Timeline.js"
+import Task from "views/examples/Task.js"
 
 var routes = [
+  {
+    path: "/group/:id/task",
+    name: "Task",
+    icon: "ni ni-laptop text-orange",
+    component: <Task />,
+    layout: "/admin",
+  },
   {
     path: "/group/:id/timeline",
     name: "Timeline",
     icon: "ni ni-tv-2 text-primary",
-    component: <Index />,
+    component: <Timeline />,
     layout: "/admin",
   },
   {
