@@ -1,4 +1,6 @@
-import { useParams } from "react-router-dom";
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { Container, Label } from "reactstrap";
 import Header from "components/Headers/Header";
@@ -8,6 +10,8 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
+import Modal from '@mui/material/Modal';
+import DatePicker from 'react-datepicker';
 
 const Group = () => {
 
@@ -21,6 +25,16 @@ const Group = () => {
   const [isEditing, setIsEditing] = useState(false)
   const [profs, setProfs] = useState(null)
   const [user, setUser] = useState(null)
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const [selectedDate, setSelectedDate] = useState(null);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+  };
+
+  const navigate = useNavigate()
 
   const id = localStorage.getItem("id");
 
@@ -33,6 +47,18 @@ const Group = () => {
   const params = useParams()
 
   const id_grupo = localStorage.getItem("id_grupo") == null ? localStorage.getItem("id_grupo") : params.id 
+
+  const formatDate = (date) => {
+    if (date) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+    return '';
+  };
+
+  const formattedDate = formatDate(selectedDate);
 
   const handleGetProfs = async () => {
     const response = await fetch(`http://localhost:8000/profs/`)
@@ -63,6 +89,23 @@ const Group = () => {
     setGroup(group)
   }
   
+  const handleCreateTask = async (e) => {
+      e.preventDefault();
+      const form = new FormData()
+      form.append("titulo", e.target.titulo.value);
+      form.append("descricao", e.target.descricao.value);
+      form.append("dataEntrega", e.target.dataEntrega.value);
+      form.append("group_id", id_grupo);
+      const response = await fetch(`http://localhost:8000/timeline/create/`, {
+        method: "POST",
+        body: form
+      })
+
+      if (response.ok) {
+          alert("Nova task adicionada com sucesso!")
+          navigate(`/admin/group/${id_grupo}/timeline`)
+        }
+      }
 
   const handleUpdateGroup = async (e) => {
     e.preventDefault();
@@ -129,19 +172,28 @@ const Group = () => {
                     >
                       Chat
                     </Button>
-                    <Button
+                    {user?.tipo_usuario == 1 ? 
+                    (
+                      <Button
                       color="info"
                       onClick={() => setIsEditing(!isEditing)}
                     >
                       {isEditing ? "Cancelar" : "Editar"}
                     </Button>
+                    ) : (<Button
+                    color="info"
+                    href={`/admin/group/${group?.id}/timeline`}
+                    >
+                    Timeline
+                    </Button>)}
                     {user?.tipo_usuario == 2 ? (
                       <Button
                         color="success"
-                        href={`/admin/group/${group?.id}/task`}
+                        onClick={handleOpen}
                       >
                         Adicionar Task
                       </Button>
+
                     ):null}
                     {isEditing ? (
                       <Button
@@ -199,6 +251,69 @@ const Group = () => {
     )
   }
 
+  const createModal = () => {
+    return (
+      <div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 400, bgcolor: 'background.paper', border: '2px solid #000', boxShadow: 24, p: 4,}}>
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              Adicione uma task:
+            </Typography>
+            <Form onSubmit={handleCreateTask}>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <Label for="tituloTask">Titulo da Task</Label>
+              <Input
+                placeholder="Título"
+                name="titulo"
+                required
+              />
+              <Label for="descricaoTask">Descrição da Task</Label>
+              <Input
+                placeholder="Descrição"
+                name="descricao"
+                required
+              />
+              <Label for="dataEntrega">Data de entrega</Label>
+              <br />
+              <DatePicker
+                placeholderText="Data da Entrega"
+                required
+                dateFormat="dd/MM/yyyy"
+                selected={selectedDate}
+                onChange={handleDateChange}
+                className="form-control"
+                />
+              <input type="hidden" name="dataEntrega" value={formattedDate} />
+            </Typography>
+
+            <br />
+
+            <Button
+              color="danger"
+              onClick={handleClose}
+            >
+              Cancelar
+            </Button>
+
+            <Button
+              color="success"
+              type="submit"
+            >
+              Salvar
+            </Button>
+
+            </Form>
+          </Box>
+        </Modal>
+      </div>
+    );
+  }
+
 
   return (
     <>
@@ -208,6 +323,7 @@ const Group = () => {
           {groupBox(group)}
         </Row>
     </Container>
+    {createModal()}
     </>
   );
 };
