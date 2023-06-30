@@ -182,7 +182,7 @@ function Timeline() {
                     download
                     href={`${t.arquivo}`}
                   >
-                    Download Arquivo
+                    Download Arquivo  
                     </Button>
                   </React.Fragment>
               ) : null}
